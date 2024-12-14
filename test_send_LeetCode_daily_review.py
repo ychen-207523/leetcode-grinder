@@ -5,7 +5,6 @@ import json
 # Import the Lambda function handler
 from send_LeetCode_daily_review import lambda_handler
 
-
 class TestLambdaFunction(unittest.TestCase):
 
     @patch('send_LeetCode_daily_review.boto3.client')
@@ -16,11 +15,9 @@ class TestLambdaFunction(unittest.TestCase):
 
         # Mock S3 response with sample JSON data
         sample_questions = [
-            {"id": 1642, "title": "Furthest Building You Can Reach", "difficulty": "Medium",
-             "url": "https://leetcode.com/problems/furthest-building-you-can-reach/"},
+            {"id": 1642, "title": "Furthest Building You Can Reach", "difficulty": "Medium", "url": "https://leetcode.com/problems/furthest-building-you-can-reach/"},
             {"id": 1, "title": "Two Sum", "difficulty": "Easy", "url": "https://leetcode.com/problems/two-sum/"},
-            {"id": 42, "title": "Trapping Rain Water", "difficulty": "Hard",
-             "url": "https://leetcode.com/problems/trapping-rain-water/"}
+            {"id": 42, "title": "Trapping Rain Water", "difficulty": "Hard", "url": "https://leetcode.com/problems/trapping-rain-water/"}
         ]
         mock_s3.get_object.return_value = {
             'Body': MagicMock(read=lambda: json.dumps(sample_questions).encode('utf-8'))
@@ -29,7 +26,7 @@ class TestLambdaFunction(unittest.TestCase):
         # Mock SNS client
         mock_sns = MagicMock()
         mock_boto_client.side_effect = lambda service, **kwargs: mock_s3 if service == 's3' else mock_sns
-        mock_sns.publish.return_value = {"MessageId": "12345"}  # Mock publish response
+        mock_sns.publish.return_value = {"MessageId": "mock-message-id"}  # Mock publish response
 
         # Call the Lambda handler
         event = {}
