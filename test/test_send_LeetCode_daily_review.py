@@ -1,5 +1,8 @@
+import os
+import sys
 import unittest
-from send_LeetCode_daily_review import lambda_handler
+
+from src.lambda_handler.send_LeetCode_daily_review import lambda_handler
 
 
 class TestLambdaFunction(unittest.TestCase):
