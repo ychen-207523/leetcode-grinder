@@ -25,3 +25,38 @@ leetcode-grinder/
 ├── README.md
 └── .gitignore
 ```
+## Steps to Deploy
+### Prerequisites
+- AWS Account
+- IAM permissions to create and manage S3, Lambda, SNS, and EventBridge Scheduler resources.
+- An email address to subscribe to SNS notifications
+### Create the S3 Bucket and Upload questions.json
+1. Go to the S3 Console.
+
+2. Click Create Bucket:
+
+   - Name the bucket `leetcode-completed-questions` (Or the one you choose).
+   - Keep all default settings, then click Create Bucket.
+
+3. Open the newly created bucket.
+
+4. Click Upload:
+   - Select or drag your questions.json file.
+   - Click Upload.
+5. Example content for questions.json:
+```json
+[
+  {
+    "id": 1,
+    "title": "Two Sum",
+    "difficulty": "Easy",
+    "url": "https://leetcode.com/problems/two-sum/"
+  },
+  {
+    "id": 2,
+    "title": "Add Two Numbers",
+    "difficulty": "Medium",
+    "url": "https://leetcode.com/problems/add-two-numbers/"
+  }
+]
+```
