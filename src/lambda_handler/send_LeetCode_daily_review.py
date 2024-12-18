@@ -1,15 +1,18 @@
 import boto3
 import json
 import random
-
+from dotenv import load_dotenv
+import os
 # Initialize AWS clients
 s3 = boto3.client('s3')
 sns = boto3.client('sns')
 
+load_dotenv()
+
 # Configuration: Update these values
-bucket_name = "leetcode-completed-questions"
-key = "questions.json"
-topic_arn = "arn:aws:sns:us-east-1:226063781515:LeetCodeDailyReview"
+bucket_name = os.getenv("S3_BUCKET_NAME")
+key = os.getenv("S3_FILE_NAME")
+topic_arn = os.getenv("AWS_SNS_TOPIC_ARN")
 
 def lambda_handler(event, context):
     print("Starting Lambda function execution...")
