@@ -131,3 +131,7 @@ python -m unittest test.test_send_LeetCode_daily_review
  - Deploy the function to AWS Lambda.
 
 8. The lambda function should be triggered daily at the time you set up in the EventBridge Scheduler.
+
+## Future Improvements
+Add backend automation to update the questions.json file with the latest completed questions.
+
