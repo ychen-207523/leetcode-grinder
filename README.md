@@ -114,3 +114,20 @@ leetcode-grinder/
        ]
    }
    ```
+5. Create .env file in the root directory and add the following environment variables:
+```bash
+S3_BUCKET_NAME=leetcode-completed-questions
+S3_OBJECT_KEY=questions.json
+SNS_TOPIC_ARN=arn:aws:sns:<your-region>:<your-arn-number>:LeetCodeDailyReview
+```
+
+6. Now, you should be able to test the lambda function locally
+```bash
+python -m unittest test.test_send_LeetCode_daily_review  
+```
+7. Deploy the function to AWS Lambda
+ - Add your environment configuration to the Lambda function > Configuration > Environment variables.
+ - Remove `dotenv` from the code.
+ - Deploy the function to AWS Lambda.
+
+8. The lambda function should be triggered daily at the time you set up in the EventBridge Scheduler.
