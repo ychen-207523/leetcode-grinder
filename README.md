@@ -60,3 +60,57 @@ leetcode-grinder/
   }
 ]
 ```
+### Create an SNS Topic and Subscribe to It
+
+1. Go to the SNS Console.
+
+2. Click Topics > Create Topic:
+   - Choose Standard.
+   - Name the topic LeetCodeDailyReview.
+   - Click Create Topic.
+   - Copy the Topic ARN for later use.
+   
+3. Under Subscriptions, click Create Subscription:
+   - Protocol: Email
+   - Endpoint: Enter your email address.
+   - Click Create Subscription.
+   
+4. Check your email inbox and confirm the subscription.
+
+### Create an IAM Role for Lambda Execution
+1. Go to the IAM Console.
+
+2. Click Roles > Create Role:
+
+   - Trusted entity type: AWS Service
+   - Use case: Lambda
+   - Click Next.
+3. Attach the following policies:
+
+   - AmazonS3ReadOnlyAccess: Allows Lambda to read the questions.json file from S3.
+   - AmazonSNSFullAccess: Allows Lambda to publish messages to the SNS topic.
+
+4. Add an Inline Policy to allow EventBridge to trigger Lambda:
+
+   - Go to the Permissions tab of the role.
+   - Click Add Permissions > Create Inline Policy.
+   - Use this JSON:
+   ```json
+   {
+       "Version": "2012-10-17",
+       "Statement": [
+           {
+               "Sid": "AllowSNSTopicPublish",
+               "Effect": "Allow",
+               "Action": "sns:Publish",
+               "Resource": "arn:aws:sns:us-east-1:226063781515:LeetCodeDailyReview"
+           },
+           {
+               "Sid": "AllowEventBridgeInvokeLambda",
+               "Effect": "Allow",
+               "Action": "lambda:InvokeFunction",
+               "Resource": "arn:aws:lambda:us-east-1:226063781515:function:sendLeetCodeDailyReview"
+           }
+       ]
+   }
+   ```
