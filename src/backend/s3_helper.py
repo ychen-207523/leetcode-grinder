@@ -29,3 +29,24 @@ def upload_question_to_s3(question):
         print(f"Uploaded {file_name} to S3 successfully.")
     except Exception as e:
         raise Exception(f"Error uploading question to S3: {str(e)}")
+
+
+def get_random_question_from_s3():
+    bucket_name = 'your-s3-bucket-name'
+    folder_prefix = 'questions/'
+
+    # List all files in the folder
+    response = s3.list_objects_v2(Bucket=bucket_name, Prefix=folder_prefix)
+    if 'Contents' not in response:
+        raise Exception('No files found in the specified S3 folder.')
+
+    question_files = [item['Key'] for item in response['Contents'] if item['Key'] != folder_prefix]
+
+    # Pick a random file
+    random_file = random.choice(question_files)
+
+    # Fetch the content of the random file
+    question_data = s3.get_object(Bucket=bucket_name, Key=random_file)
+    question = json.loads(question_data['Body'].read().decode('utf-8'))
+
+    return question
