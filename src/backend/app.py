@@ -1,8 +1,26 @@
 from flask import Flask, request, jsonify
 from s3_helper import upload_question_to_s3
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../frontend', static_url_path='/')
 
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
+
+
+@app.route('/get-random-question', methods=['GET'])
+def get_random_question():
+    """
+    Endpoint to fetch a random LeetCode question from S3.
+    """
+    try:
+        question = get_random_question_from_s3()
+        if question:
+            return jsonify(question), 200
+        else:
+            return jsonify({'error': 'No questions available.'}), 404
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/add-question', methods=['POST'])
 def add_question():
