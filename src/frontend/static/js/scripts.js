@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("addQuestionForm");
   const getRandomQuestionBtn = document.getElementById("getRandomQuestion");
   const messageDiv = document.getElementById("message");
+  const randomQuestionDiv = document.getElementById("randomQuestion");
 
   // Add question form submission
   form.addEventListener("submit", async (event) => {
@@ -36,47 +37,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Fetch random question
-  getRandomQuestionBtn.addEventListener("click", async () => {
+  // Fetch and display a random question
+  const fetchRandomQuestion = async () => {
     try {
       const response = await fetch("/get-random-question");
-      const question = await response.json();
+      const data = await response.json();
 
       if (response.ok) {
-        messageDiv.innerHTML = `
-          <p><strong>Title:</strong> ${question.title}</p>
-          <p><strong>Difficulty:</strong> ${question.difficulty}</p>
-          <p><a href="${question.url}" target="_blank">View Problem</a></p>
+        randomQuestionDiv.innerHTML = `
+          <p><strong>Title:</strong> ${data.title}</p>
+          <p><strong>Difficulty:</strong> ${data.difficulty}</p>
+          <p><a href="${data.url}" target="_blank">View Problem</a></p>
         `;
-        messageDiv.style.color = "black";
+        randomQuestionDiv.style.color = "black";
       } else {
-        messageDiv.textContent = question.error || "No question available.";
-        messageDiv.style.color = "red";
+        randomQuestionDiv.textContent = data.error || "No question available.";
+        randomQuestionDiv.style.color = "red";
       }
     } catch (error) {
-      messageDiv.textContent = "Failed to fetch a random question.";
-      messageDiv.style.color = "red";
+      randomQuestionDiv.textContent = "Failed to fetch a random question.";
+      randomQuestionDiv.style.color = "red";
     }
-  });
-});
+  };
 
-document.getElementById("getRandomQuestion").addEventListener("click", async () => {
-    const randomQuestionDiv = document.getElementById("randomQuestion");
-
-    try {
-        const response = await fetch("/get-random-question");
-        const data = await response.json();
-
-        if (response.ok) {
-            randomQuestionDiv.innerHTML = `
-                <p><strong>Title:</strong> ${data.title}</p>
-                <p><strong>Difficulty:</strong> ${data.difficulty}</p>
-                <p><a href="${data.url}" target="_blank">View Problem</a></p>
-            `;
-        } else {
-            randomQuestionDiv.textContent = data.error || "No question available.";
-        }
-    } catch (error) {
-        randomQuestionDiv.textContent = "Failed to fetch a random question.";
-    }
+  // Attach the fetchRandomQuestion function to the button
+  getRandomQuestionBtn.addEventListener("click", fetchRandomQuestion);
 });
