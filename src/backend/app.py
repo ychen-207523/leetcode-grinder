@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from s3_helper import upload_question_to_s3
+from s3_helper import upload_question_to_s3, get_random_question_from_s3
 
 app = Flask(__name__, static_folder='../frontend', static_url_path='/')
 
