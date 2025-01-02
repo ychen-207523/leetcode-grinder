@@ -1,6 +1,8 @@
+import random
 import boto3
 import json
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -32,8 +34,8 @@ def upload_question_to_s3(question):
 
 
 def get_random_question_from_s3():
-    bucket_name = 'your-s3-bucket-name'
-    folder_prefix = 'questions/'
+    bucket_name = os.getenv("S3_BUCKET_NAME")
+    folder_prefix = os.getenv("FOLDER_PREFIX")
 
     # List all files in the folder
     response = s3.list_objects_v2(Bucket=bucket_name, Prefix=folder_prefix)
