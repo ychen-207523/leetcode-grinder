@@ -49,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
           <p><strong>Difficulty:</strong> ${data.difficulty}</p>
           <p><a href="${data.url}" target="_blank">View Problem</a></p>
         `;
-        randomQuestionDiv.style.color = "black";
       } else {
         randomQuestionDiv.textContent = data.error || "No question available.";
         randomQuestionDiv.style.color = "red";
