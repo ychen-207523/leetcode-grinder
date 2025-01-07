@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const getRandomQuestionBtn = document.getElementById("getRandomQuestion");
   const messageDiv = document.getElementById("message");
   const randomQuestionDiv = document.getElementById("randomQuestion");
+  const aiChat = document.getElementById("sendChat")
 
   // Add question form submission
   form.addEventListener("submit", async (event) => {
@@ -61,4 +62,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Attach the fetchRandomQuestion function to the button
   getRandomQuestionBtn.addEventListener("click", fetchRandomQuestion);
+
+  const fetchAiResponse = async (message) => {
+    const chatInput = document.getElementById("chatInput").value;
+    const chatResponseDiv = document.getElementById("chatResponse");
+    try {
+        const response = await fetch("/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: chatInput }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            chatResponseDiv.textContent = data.response;
+        } else {
+            chatResponseDiv.textContent = data.error || "An error occurred.";
+        }
+    } catch (error) {
+        chatResponseDiv.textContent = "Failed to connect to ChatGPT.";
+    }
+  }
+  aiChat.addEventListener("click", fetchAiResponse);
 });
