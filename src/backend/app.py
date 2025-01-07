@@ -6,7 +6,7 @@ from s3_helper import upload_question_to_s3, get_random_question_from_s3
 
 app = Flask(__name__, static_folder='../frontend', static_url_path='/')
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+OpenAI.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route('/')
 def index():
@@ -76,7 +76,7 @@ def chat_with_gpt():
             ]
         )
         # Extract AI's response
-        message = response.choices[0].message
+        message = response.choices[0].message.content
         return jsonify({'response': message}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
