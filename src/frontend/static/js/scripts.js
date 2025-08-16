@@ -63,26 +63,30 @@ document.addEventListener("DOMContentLoaded", () => {
   // Attach the fetchRandomQuestion function to the button
   getRandomQuestionBtn.addEventListener("click", fetchRandomQuestion);
 
-  const fetchAiResponse = async (message) => {
-    const chatInput = document.getElementById("chatInput").value;
+  const fetchAiResponse = async () => {
+    const question_id = document.getElementById("chatQuestionId").value;
+    const description = document.getElementById("chatDescription").value;
+    const mode = document.getElementById("chatMode").value;
     const chatResponseDiv = document.getElementById("chatResponse");
+
     try {
-        const response = await fetch("/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt: chatInput }),
-        });
+      const response = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question_id, description, mode }),
+      });
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if (response.ok) {
-            chatResponseDiv.textContent = data.response;
-        } else {
-            chatResponseDiv.textContent = data.error || "An error occurred.";
-        }
+      if (response.ok) {
+        chatResponseDiv.textContent = data.response;
+      } else {
+        chatResponseDiv.textContent = data.error || "An error occurred.";
+      }
     } catch (error) {
-        chatResponseDiv.textContent = "Failed to connect to ChatGPT.";
+      chatResponseDiv.textContent = "Failed to connect to ChatGPT.";
     }
-  }
+  };
+
   aiChat.addEventListener("click", fetchAiResponse);
 });

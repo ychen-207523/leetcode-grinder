@@ -57,27 +57,40 @@ def add_question():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 @app.route('/chat', methods=['POST'])
 def chat_with_gpt():
     try:
         data = request.get_json()
-        if 'prompt' not in data:
-            return jsonify({'error': 'Missing prompt field'}), 400
 
+        if not data:
+            return jsonify({'error': 'Missing request body'}), 400
+
+        question_id = data.get('question_id', '').strip()
+        description = data.get('description', '').strip()
+        mode = data.get('mode', 'hint')
+
+        if not question_id and not description:
+            return jsonify({'error': 'Provide at least a question_id or description'}), 400
+
+        if description:
+            user_prompt = f"Here is a LeetCode problem:\n\n{description}\n\nPlease give me a {mode}."
+        else:
+            user_prompt = f"The LeetCode problem is: {question_id}. Please give me a {mode}."
+
+        # Call OpenAI
         client = OpenAI()
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant for algorithm and leetcode question."},
-                {
-                    "role": "user",
-                    "content": data['prompt']
-                }
+                {"role": "system", "content": "You are a helpful assistant for algorithm and LeetCode questions. Provide only what the user asks (hint or solution), the solution should be in Java."},
+                {"role": "user", "content": user_prompt}
             ]
         )
-        # Extract AI's response
+
         message = response.choices[0].message.content
         return jsonify({'response': message}), 200
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
