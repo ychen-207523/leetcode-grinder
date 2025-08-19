@@ -1,7 +1,7 @@
 # leetcode-grinder
 ## Description
 Leetcode questions require grinding to get better. We need more than just daily new question but also review the old questions. 
-This project ets up an AWS Lambda function to send a random completed LeetCode question daily via SNS. 
+This project sets up an AWS Lambda function to send a random completed LeetCode question daily via SNS. 
 The questions are stored in S3 bucket as a json file.
 The AWS EventBridge Scheduler triggers the Lambda to send the SNS message daily on 9:00 AM to wake up the user.
 ## Project Overview
@@ -13,17 +13,32 @@ The AWS EventBridge Scheduler triggers the Lambda to send the SNS message daily 
 - **CloudWatch Logs**: The CloudWatch Logs stores the logs of the Lambda function.
 ## Project Structure
 ```
-leetcode-grinder/
+src/
 │
-├── src/
-│   └── lambda/
-│       └── send_LeetCode_daily_review.py  # Lambda function code
+├── backend/
+│   ├── app.py              # Flask entrypoint
+│   └── s3_helper.py        # S3 upload/list helpers
+│
+├── frontend/
+│   ├── static/
+│   │   ├── css/
+│   │   │   └── styles.css
+│   │   └── js/
+│   │       └── scripts.js
+│   └── index.html
+│
+├── lambda_handler/
+│   └── send_LeetCode_daily_review.py  # AWS Lambda
 │
 ├── test/
-│   └── test_send_LeetCode_daily_review.py  # Unit tests
+│   ├── __init__.py
+│   └── test_send_LeetCode_daily_review.py
 │
-├── README.md
-└── .gitignore
+├── tool/
+│   └── separate.py          # To
+│
+├── .env                     # keep credentials & config
+└── requirements.txt         # Flask, boto3, python-dotenv, etc.
 ```
 ## Steps to Deploy
 ### Prerequisites
